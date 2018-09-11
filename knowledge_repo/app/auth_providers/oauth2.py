@@ -153,15 +153,17 @@ class OAuth2Provider(KnowledgeAuthProvider):
             if isinstance(key, (list, tuple)):
                 if len(key) == 1:
                     key = key[0]
+                elif d[key[0]] is None:
+                    return extract_from_dict(d, key[1:])
                 else:
-                    return extract_from_dict(d[key[0]], key[1:])
+                    return extract_from_dict(d, key[0])
             if isinstance(key, str):
                 return d[key]
             raise RuntimeError("Invalid key type: {}.".format(key))
 
         response = self.oauth_client.get(self.get_endpoint_url(self.user_info_endpoint), verify=self.verify_ssl_certs)
         try:
-            response_dict = json.loads(response.content)
+            response_dict = json.loads(response.content.decode("utf-8"))
             identifier = extract_from_dict(response_dict, self.user_info_mapping['identifier'])
             if identifier is None:
                 raise ValueError("identifier '{}' not found in authentication response".format(self.user_info_mapping['identifier']))
