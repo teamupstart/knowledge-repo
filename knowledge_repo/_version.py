@@ -28,7 +28,6 @@ __dependencies__ = [
     'pyyaml',  # Used to configure knowledge repositories
 
     # Flask App Dependencies
-    'flask',  # Main flask framework
     'flask_login',  # User management framework
     'flask_principal',  # Permissions management framework
     'flask_mail',  # Mail client and utilities
