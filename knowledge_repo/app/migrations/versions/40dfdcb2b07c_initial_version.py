@@ -58,7 +58,7 @@ def upgrade():
     sa.Column('title', sa.Text(), nullable=True),
     sa.Column('tldr', sa.Text(), nullable=True),
     sa.Column('keywords', sa.Text(), nullable=True),
-    sa.Column('thumbnail', sa.Text(), nullable=True),
+    sa.Column('thumbnail', sa.Text(4294000000), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.Column('status', sa.Integer(), nullable=True),

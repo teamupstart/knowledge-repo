@@ -370,7 +370,7 @@ class Post(db.Model):
     title = db.Column(db.Text())
     tldr = db.Column(db.Text)
     keywords = db.Column(db.Text)
-    thumbnail = db.Column(db.Text())
+    thumbnail = db.Column(db.Text(4294000000))
 
     private = db.Column(db.Integer())
 
