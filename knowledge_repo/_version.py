@@ -5,7 +5,7 @@ __all__ = ['__author__', '__author_email__', '__version__', '__git_uri__', '__de
 
 __author__ = "Nikki Ray (maintainer), Robert Chang, Dan Frank,  Chetan Sharma,  Matthew Wardrop"
 __author_email__ = "nikki.ray@airbnb.com, robert.chang@airbnb.com, dan.frank@airbnb.com, chetan.sharma@airbnb.com, mpwardrop@gmail.com"
-__version__ = "0.8.1"
+__version__ = "0.8.8"
 try:
     with open(os.devnull, 'w') as devnull:
         __version__ += '_' + subprocess.check_output(['git', 'rev-parse', 'HEAD'], shell=False, stderr=devnull).decode('utf-8').replace('\n', '')
@@ -26,6 +26,7 @@ __dependencies__ = [
     'gitpython',  # Git abstraction
     'tabulate',  # Rendering information prettily in knowledge_repo script
     'pyyaml',  # Used to configure knowledge repositories
+    'cooked_input',  # Used for interactive input from user in CLI tooling
 
     # Flask App Dependencies
     'flask',  # Main flask framework
@@ -38,6 +39,7 @@ __dependencies__ = [
     'werkzeug',  # Development webserver
     'gunicorn',  # Deployed webserver
     'inflection',  # String transformation library
+    'pillow',  # Image thumbnailing
 ]
 
 __optional_dependencies__ = {

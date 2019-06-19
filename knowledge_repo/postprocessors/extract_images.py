@@ -1,6 +1,7 @@
 import os
 import posixpath
 import re
+import six
 import logging
 
 from ..postprocessor import KnowledgePostProcessor
@@ -21,7 +22,7 @@ class ExtractImages(KnowledgePostProcessor):
         thumbnail = kp.headers.get('thumbnail', 0)
 
         # if thumbnail is a number, select the nth image in this post as the thumbnail
-        if isinstance(thumbnail, str) and thumbnail.isdigit():
+        if isinstance(thumbnail, six.string_types) and thumbnail.isdigit():
             thumbnail = int(thumbnail)
         if isinstance(thumbnail, int):
             if len(images) > 0:
@@ -53,7 +54,7 @@ class ExtractImages(KnowledgePostProcessor):
             # The src attribute is exected to always be surrounded by quotes.
             r'<img\s+(?:\w+(?:=([\'\"])?(?(1)(?:(?!\1).)*?\1|[^>]*?))?\s+?)*src=([\'\"])(?P<src>(?:(?!\2).)*?)\2(?:\s+\w+(?:=([\'\"])?(?(1)(?:(?!\4).)*?\4|[^>]*?))?)*\s*\/?>'
         ))
-        images.extend(self.collect_images_for_pattern(md, r'\!\[.*\]\((?P<src>[^\)]*)\)'))
+        images.extend(self.collect_images_for_pattern(md, r'\!\[[\s\S]*?\]\((?P<src>[^\)]*)\)'))
         return sorted(images, key=lambda x: x['offset'])
 
     def collect_images_for_pattern(self, md, pattern=None):

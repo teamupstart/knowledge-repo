@@ -28,6 +28,8 @@ def set_up_indexing_timers(app):
             logger.info("Not spawning index-sync timers for non-master application instance: {}".format(app.uuid))
             return
 
+        logger.info("Spawning index-sync timers for master application instance: {}".format(app.uuid))
+
         def index_watchdog(app):
             while True:
                 if not hasattr(app, 'sync_thread') or not app.sync_thread.is_alive():
@@ -38,6 +40,7 @@ def set_up_indexing_timers(app):
                 time.sleep(app.config['INDEXING_TIMEOUT'])
 
         def index_sync_loop(app):
+            current_app.db.engine.dispose()
             while True:
                 with app.app_context():
                     update_index(check_timeouts=False)

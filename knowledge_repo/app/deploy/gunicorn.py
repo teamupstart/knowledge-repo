@@ -29,19 +29,18 @@ class GunicornDeployer(BaseApplication, KnowledgeDeployer):
                 self.cfg.set(key, value)
 
         # Update the configuration with the options specified via KnowledgeDeployer
-        deployer_args = {
+        options = {
             'bind': u'{}:{}'.format(self.host, self.port),
             'workers': self.workers,
             'timeout': self.timeout,
         }
-
-        for key, value in deployer_args.items():
+        if self.app.config['DEPLOY_HTTPS']:
+            options['certfile'] = self.app.config['SSL_CERT']['cert']
+            options['keyfile'] = self.app.config['SSL_CERT']['key']
+        for key, value in options.items():
             self.cfg.set(key, value)
 
     def load(self):
-        return self.builder_func()
-
-    def run(self):
         if not self.app.check_thread_support():
             raise RuntimeError("Database configuration is not suitable for deployment (not thread-safe).")
-        return BaseApplication.run(self)
+        return self.app.start_indexing()

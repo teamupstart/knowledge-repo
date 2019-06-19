@@ -4,6 +4,9 @@ import logging
 import os
 import time
 import types
+import yaml
+
+import six
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +45,7 @@ class KnowledgeRepositoryConfig(dict):
                 dict.update(self, value)
             elif isinstance(value, types.ModuleType):
                 self.__update_from_module(value)
-            elif type(value) == str:
+            elif isinstance(value, six.string_types):
                 if os.path.exists(value):
                     self.__update_from_file(value)
                 else:
@@ -60,7 +63,7 @@ class KnowledgeRepositoryConfig(dict):
                 self.DEFAULT_CONFIGURATION.update(value)
             elif isinstance(value, types.ModuleType):
                 self.__defaults_from_module(value)
-            elif type(value) == str:
+            elif isinstance(value, six.string_types):
                 if os.path.exists(value):
                     self.__defaults_from_file(value)
                 else:
@@ -89,7 +92,7 @@ class KnowledgeRepositoryConfig(dict):
             self.__set_from_module(d, config, force)
         elif filename.endswith('.yml'):
             with open(filename) as f:
-                config = yaml.load(f)
+                config = yaml.safe_load(f)
             self.update(config)
 
     def __set_from_module(self, d, module, force=False):

@@ -9,11 +9,10 @@ import socket
 from io import open
 
 import git
+import six
 import yaml
 
-from knowledge_repo._version import __git_uri__
 from ..repository import KnowledgeRepository
-from ..utils.exec_code import get_module_for_source
 from ..utils.types import str_types
 from ..utils.encoding import encode
 
@@ -21,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 class GitKnowledgeRepository(KnowledgeRepository):
-    _registry_keys = ['', 'git']
+    _registry_keys = ['git']
 
     TEMPLATES = {
         'README.md': os.path.abspath(os.path.join(os.path.dirname(__file__), '../templates', 'repository_readme.md')),
@@ -94,7 +93,7 @@ class GitKnowledgeRepository(KnowledgeRepository):
 
     @path.setter
     def path(self, path):
-        assert isinstance(path, str), "The path specified must be a string."
+        assert isinstance(path, six.string_types), "The path specified must be a string."
         path = os.path.abspath(os.path.expanduser(path))
         if not os.path.exists(path):
             path = os.path.abspath(path)
@@ -147,7 +146,7 @@ class GitKnowledgeRepository(KnowledgeRepository):
         logger.info("Fetching updates to the knowledge repository...")
         self.git_remote.fetch()
         current_branch = self.git.active_branch
-        self.git.branches.master.checkout()
+        self.git.branches[branch].checkout()
         self.git_remote.pull(branch)
         current_branch.checkout()
 
